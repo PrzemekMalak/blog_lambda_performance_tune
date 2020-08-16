@@ -1,0 +1,75 @@
+
+# Build GOLANG Lambda
+```
+go get github.com/aws/aws-lambda-go/lambda 
+GOOS=linux go build cpu_lambda.go 
+zip function.zip cpu_lambda 
+```
+# Deploy GOLANG Lambda
+```
+aws lambda create-function --function-name cpu_lambda_go --runtime go1.x \
+--zip-file fileb://function.zip --handler cpu_lambda \
+--region eu-west-1 \
+--role arn:aws:iam::220107442686:role/Lambda-Simple
+```
+
+# Build Node.js Lambda
+```
+zip function.zip index.js
+```
+# Deploy Node.js Lambda
+```
+aws lambda create-function --function-name cpu_lambda_node --runtime nodejs12.x \
+--zip-file fileb://function.zip --handler index.handler \
+--region eu-west-1 \
+--role arn:aws:iam::220107442686:role/Lambda-Simple
+```
+
+# Install lumigo-cli
+```
+npm install -g lumigo-cli
+```
+
+# Test *Speed*
+## GOLANG
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy speed -e 10000000
+```
+## Node.js
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy speed -e 10000000
+```
+
+# Test *Speed* - 200M
+## GOLANG
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy speed -e 20000000
+```
+## Node.js
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy speed -e 20000000
+```
+
+# Test *Balanced* - 200M
+## GOLANG
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy balanced -e 20000000
+```
+## Node.js
+```
+lumigo-cli powertune-lambda -n cpu_lambda_go -r eu-west-1 --strategy balanced -e 20000000
+```
+
+# Build & deploy REQ Lambda
+```
+go get github.com/aws/aws-lambda-go/lambda 
+
+GOOS=linux go build req_lambda.go
+
+zip function.zip req_lambda
+
+aws lambda create-function --function-name req_lambda_go --runtime go1.x \
+--zip-file fileb://function.zip --handler req_lambda \
+--region eu-west-1 \
+--role arn:aws:iam::220107442686:role/Lambda-Simple
+```
